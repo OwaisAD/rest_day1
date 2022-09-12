@@ -1,5 +1,7 @@
 package facades;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import dtos.EmployeeDTO;
 import dtos.PersonDTO;
 import entities.Employee;
@@ -66,7 +68,7 @@ public class EmployeeFacade {
         EntityManager em = emf.createEntityManager();
         TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.name = :employeeName", Employee.class);
         query.setParameter("employeeName", name);
-        Employee employee = query.getSingleResult();
+        Employee employee = query.getResultList().get(0);
         return employee;
     }
 
@@ -93,7 +95,8 @@ public class EmployeeFacade {
             em.close();
         return employee;
     }
-    
+
+    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     public static void main(String[] args) {
         emf = EMF_Creator.createEntityManagerFactory();
         EmployeeFacade ef = getEmployeeFacade(emf);
@@ -102,6 +105,9 @@ public class EmployeeFacade {
         //ef.getEmployeeById()
         //ef.getAll().forEach(dto->System.out.println(dto));
 
+        System.out.println(gson.toJson(ef.getAllEmployees()));
+
+        System.out.println(ef.getEmployeeByName("Elon Musk"));
 
 
     }
