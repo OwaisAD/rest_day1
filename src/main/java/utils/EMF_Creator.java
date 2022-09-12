@@ -35,7 +35,8 @@ public class EMF_Creator {
     private static EntityManagerFactory createEntityManagerFactory(boolean isTest) {
 
         
-        boolean isDeployed = (System.getenv("DEPLOYED") != null);
+        boolean isDeployed = (System.getenv("DEPLOYED") != null); // docker compose indeholder miljøvariabler - en af dem hedder deployed som bliver tjekket her
+        //findes den ved vi at koden er deployet på dropletten
         if (isDeployed) {
             /* Strategy for deployment */
             System.out.println("USING ENVIRONMENT VARIABLES");
