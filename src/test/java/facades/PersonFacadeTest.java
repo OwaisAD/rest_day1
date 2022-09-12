@@ -60,6 +60,8 @@ public class PersonFacadeTest {
     public void testAFacadeMethod() throws Exception {
         assertEquals(2, facade.getAll().size(), "Expects two rows in the database");
     }
-    
+
+
+
 
 }
