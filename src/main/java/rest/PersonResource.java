@@ -46,14 +46,38 @@ public class PersonResource {
         return "Hello " + userName;
     }
 
+    // for at teste vores exceptions
+    @GET
+    @Path("/testexception")
+    @Produces("text/plain")
+    public String throwException() throws WebApplicationException {
+        throw new WebApplicationException("My exception");
+    }
 
 
-    /*@POST
+    @POST
     @Produces({MediaType.APPLICATION_JSON})
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response postExample(String input){
-        PersonDTO rmdto = GSON.fromJson(input, PersonDTO.class);
-        System.out.println(rmdto);
-        return Response.ok().entity(rmdto).build();
-    }*/
+    public Response createPerson(String jsonInput) {
+        PersonDTO personDTO = GSON.fromJson(jsonInput, PersonDTO.class);
+        PersonDTO returned = FACADE.create(personDTO);
+        System.out.println(personDTO);
+        return Response.ok().entity(GSON.toJson(returned)).build();
+    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Path("{id}")
+    public Response editPerson(@PathParam("id") long id, String jsonInput) {
+        PersonDTO personDTO = GSON.fromJson(jsonInput, PersonDTO.class);
+        personDTO.setId(id);
+        PersonDTO returned = FACADE.update(personDTO);
+        System.out.println(personDTO);
+        return Response.ok().entity(GSON.toJson(returned)).build();
+    }
+
+
+
+
 }

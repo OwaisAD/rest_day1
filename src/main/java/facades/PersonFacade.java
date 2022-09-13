@@ -5,9 +5,11 @@ import entities.Person;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.TypedQuery;
 
 //import errorhandling.RenameMeNotFoundException;
+import errorhandling.PersonNotFoundException;
 import utils.EMF_Creator;
 
 /**
@@ -52,11 +54,32 @@ public class PersonFacade {
         }
         return new PersonDTO(personEntity);
     }
-    public PersonDTO getById(long id) { //throws RenameMeNotFoundException {
+
+    public PersonDTO update(PersonDTO personDTO) {
+
+        EntityManager em = getEntityManager();
+        Person fromDB = em.find(Person.class, personDTO.getId());
+
+        if(fromDB == null) {
+            throw new EntityNotFoundException("No such Person with id: " + personDTO.getId());
+        }
+
+        Person personEntity = new Person(personDTO.getId(), personDTO.getName(), personDTO.getAge());
+        try {
+            em.getTransaction().begin();
+            em.merge(personEntity); // merge, når vi vil opdatere
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new PersonDTO(personEntity);
+    }
+
+    public PersonDTO getById(long id) throws PersonNotFoundException { {
         EntityManager em = emf.createEntityManager();
         Person rm = em.find(Person.class, id);
-//        if (rm == null)
-//            throw new RenameMeNotFoundException("The RenameMe entity with ID: "+id+" Was not found");
+        if (rm == null)
+            throw new PersonNotFoundException("The Person entity with ID: " + id + " Was not found");
         return new PersonDTO(rm);
     }
 
@@ -67,11 +90,15 @@ public class PersonFacade {
         List<Person> personList = query.getResultList();
         return PersonDTO.getDtos(personList);
     }
-    
+
+
     public static void main(String[] args) {
+        // main for at teste vores metoder
         emf = EMF_Creator.createEntityManagerFactory();
         PersonFacade pf = getPersonFacade(emf);
-        pf.getAll().forEach(dto->System.out.println(dto));
+        //pf.getAll().forEach(dto->System.out.println(dto));
+
+        pf.update(new PersonDTO(4,"Steve",20));
     }
 
 }

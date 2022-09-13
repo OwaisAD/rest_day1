@@ -19,11 +19,18 @@ public class PersonDTO {
     private String name;
     private int age;
 
+
     public PersonDTO(String name, int age) {
         this.name = name;
         this.age = age;
     }
-    
+
+    public PersonDTO(long id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
     public static List<PersonDTO> getDtos(List<Person> persons){
         List<PersonDTO> personsdtos = new ArrayList();
         persons.forEach(person->personsdtos.add(new PersonDTO(person)));
@@ -35,6 +42,14 @@ public class PersonDTO {
             this.id = person.getId();
         this.name = person.getName();
         this.age = person.getAge();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {

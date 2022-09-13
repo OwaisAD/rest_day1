@@ -32,11 +32,10 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable>  {
     public Response toResponse(Throwable ex) {
         Logger.getLogger(GenericExceptionMapper.class.getName()).log(Level.SEVERE, null, ex);
         Response.StatusType type = getStatusType(ex);
-        ExceptionDTO err;
+        ExceptionDTO err; // vi bruger vores ExceptionDTO som laves om til JSON - den tager en statuskode og message
         if (ex instanceof WebApplicationException) {
             err = new ExceptionDTO(type.getStatusCode(), ((WebApplicationException) ex).getMessage());
         } else {
-
             err = new ExceptionDTO(type.getStatusCode(), type.getReasonPhrase());
         }
         return Response.status(type.getStatusCode())
