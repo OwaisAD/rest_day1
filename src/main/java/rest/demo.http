@@ -16,3 +16,9 @@ Content-Type: application/json
 
 {"name": "Steve", "age": 45}
 
+
+###
+GET http://localhost:8080/rest_day1_war_exploded/api/person/5
+Content-Type: application/json
+#User-Agent: Mozilla/5.0 (platform; rv:geckoversion) Gecko/geckotrail Firefox/firefoxversion
+

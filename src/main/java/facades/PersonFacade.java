@@ -75,11 +75,13 @@ public class PersonFacade {
         return new PersonDTO(personEntity);
     }
 
-    public PersonDTO getById(long id) throws PersonNotFoundException { {
+    public PersonDTO getById(long id) throws PersonNotFoundException {
         EntityManager em = emf.createEntityManager();
         Person rm = em.find(Person.class, id);
+
         if (rm == null)
             throw new PersonNotFoundException("The Person entity with ID: " + id + " Was not found");
+
         return new PersonDTO(rm);
     }
 

@@ -3,6 +3,8 @@ package rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dtos.PersonDTO;
+import entities.Person;
+import errorhandling.PersonNotFoundException;
 import utils.EMF_Creator;
 import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
@@ -40,10 +42,18 @@ public class PersonResource {
     }
 
     @GET
-    @Path("/{username}")
+    @Path("/username/{username}")
     @Produces("text/plain")
     public String getUser(@PathParam("username") String userName) {
         return "Hello " + userName;
+    }
+
+    //testing throwing an exception we made
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getUserById(@PathParam("id") long id) throws PersonNotFoundException {
+        return Response.ok().entity(GSON.toJson(FACADE.getById(id))).build();
     }
 
     // for at teste vores exceptions
@@ -76,6 +86,8 @@ public class PersonResource {
         System.out.println(personDTO);
         return Response.ok().entity(GSON.toJson(returned)).build();
     }
+
+
 
 
 

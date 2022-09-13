@@ -39,7 +39,8 @@ public class EmployeeFacadeTest {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.createNamedQuery("Employee.deleteAllRows").executeUpdate();
+            em.createNativeQuery("Truncate table Employee").executeUpdate();
+            //em.createNamedQuery("Employee.deleteAllRows").executeUpdate();
             em.persist(new Employee("Carl", "Marinade vej 12, 2000 Karlsund",16000));
             em.persist(new Employee("Elon", "Tesla street 99, 1234 Mexico City",60000));
             em.getTransaction().commit();
@@ -54,12 +55,11 @@ public class EmployeeFacadeTest {
 
     }
 
-
     @Test
     public void testGettingAnEmployeeById() {
-        String actual = facade.getEmployeeById(1).getName();
-        String expected = "Carl";
-        assertEquals(expected,actual);
+        String actual = facade.getEmployeeById(2).getName();
+        System.out.println(actual);
+        assertEquals("Carl",actual);
     }
 
     @Test
